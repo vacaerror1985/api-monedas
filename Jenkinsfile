@@ -1,18 +1,18 @@
 pipeline {
     agent {
         docker {
-            image 'dockerapimonedastt'
+            image 'api-monedastt'
             
         }
     }
     
     environment {
         // Variables de entorno para Docker y Maven
-        DOCKER__NAME     = 'dockerapimonedastt'
-        DOCKER__IMAGE    = 'dockerapimonedastt'
+        DOCKER__NAME     = 'api-monedastt'
+        DOCKER__IMAGE    = 'api-monedastt'
         DOCKER_NETWORK   = 'apimonedas-network'
         DOCKER__VERSION  = 'latest'
-        CONTAINER_NAME   = 'apimonedas'
+        CONTAINER_NAME   = 'api-monedastt'
         DOCKER__REGISTRY = 'docker.io'
         DOCKER_BUILD_DIR = 'presentacion'
         HOST_PORT        = '8081'
