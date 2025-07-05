@@ -21,12 +21,7 @@ pipeline {
 
     stages {
 
-        stage('Construcción con Maven - BUILD') {
-            steps {
-                echo '🧱 Compilando la aplicación apimonedas con Maven...'
-                bat 'mvn clean package -DskipTests'
-            }
-        }
+      
 
         stage('Construcción de imagen Docker - DEPLOY') {
             steps {
