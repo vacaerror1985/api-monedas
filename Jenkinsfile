@@ -13,7 +13,6 @@ pipeline {
         DOCKER_NETWORK   = 'apimonedas-network'
         DOCKER__VERSION  = 'latest'
         CONTAINER_NAME   = 'apimonedas'
-        DOCKER__LABEL    = 'apimonedas'
         DOCKER__REGISTRY = 'docker.io'
         DOCKER_BUILD_DIR = 'presentacion'
         HOST_PORT        = '8081'
