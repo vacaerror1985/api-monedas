@@ -2,59 +2,50 @@ pipeline {
     agent {
         docker {
             image 'dockerapimonedastt'
+            label 'apimonedas'
         }
-        label 'apimonedas' // Label should be outside the docker block
     }
-    environment { // This block should be directly under 'pipeline', not nested within 'agent'
-        // Define any environment variables here
-        DOCKER__NAME = 'dockerapimonedastt'
-        DOCKER__IMAGE = 'dockerapimonedastt'
-        DOCKER_NETWORK = 'apimonedas-network'
-        DOCKER__VERSION = 'latest'
-        CONTAINER_NAME = 'apimonedas'
-        DOCKER__LABEL = 'apimonedas'
+    
+    environment {
+        // Variables de entorno para Docker y Maven
+        DOCKER__NAME     = 'dockerapimonedastt'
+        DOCKER__IMAGE    = 'dockerapimonedastt'
+        DOCKER_NETWORK   = 'apimonedas-network'
+        DOCKER__VERSION  = 'latest'
+        CONTAINER_NAME   = 'apimonedas'
+        DOCKER__LABEL    = 'apimonedas'
         DOCKER__REGISTRY = 'docker.io'
         DOCKER_BUILD_DIR = 'presentacion'
-        HOST_PORT = '8081'
-        CONTAINER_PORT = '8080'
+        HOST_PORT        = '8081'
+        CONTAINER_PORT   = '8080'
     }
+
     stages {
-        stage('Construcción MAVEN - BUILD') {
+
+        stage('Construcción con Maven - BUILD') {
             steps {
-                echo 'Building the apimonedas applicacion con MVN...'
-                // Assuming Maven is available on the agent or configured via 'tools'
+                echo '🧱 Compilando la aplicación apimonedas con Maven...'
                 bat 'mvn clean package -DskipTests'
             }
         }
-        stage('Construir imagen Docker - DEPLOY') {
+
+        stage('Construcción de imagen Docker - DEPLOY') {
             steps {
-                echo 'Deploying the apimonedas application with Docker...'
-                dir ("${DOCKER_BUILD_DIR}") {
-                    echo "Building Docker image from ${DOCKER_BUILD_DIR}..."
-                    bat "docker build -t ${DOCKER__NAME} ."
+                echo '🐳 Construyendo imagen Docker de apimonedas...'
+                dir("${DOCKER_BUILD_DIR}") {
+                    echo "📁 Usando directorio: ${DOCKER_BUILD_DIR}"
+                    bat "docker build -t ${DOCKER__NAME}:${DOCKER__VERSION} ."
                 }
             }
         }
-        stage('Desplegar el contenedor - DEPLOY') {
+
+        stage('Despliegue del contenedor Docker') {
             steps {
-                echo 'Deploying apimonedas...'
-                // Corrected typo: --netkork -> --network
-                bat "docker run -d --name ${CONTAINER_NAME} --network ${DOCKER_NETWORK} -p ${HOST_PORT}:${CONTAINER_PORT} ${DOCKER__NAME}"
+                echo '🚀 Desplegando contenedor Docker...'
+                // Validar si el contenedor existe y eliminarlo si es necesario
+                bat "docker rm -f ${CONTAINER_NAME} || echo 'No existe el contenedor, se procede con el despliegue...'"
+                bat "docker run -d --name ${CONTAINER_NAME} --network ${DOCKER_NETWORK} -p ${HOST_PORT}:${CONTAINER_PORT} ${DOCKER__NAME}:${DOCKER__VERSION}"
             }
-        }
-    }
-    post { // Optional: Add a post section for cleanup or notifications
-        always {
-            echo 'Pipeline finished.'
-            // Example cleanup: Stop and remove the container
-            // bat "docker stop ${CONTAINER_NAME}"
-            // bat "docker rm ${CONTAINER_NAME}"
-        }
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
