@@ -13,7 +13,8 @@ pipeline {
      stage('Construir imagen Docker') {
             steps {
                 echo '🐳 Construyendo imagen Docker en raíz del proyecto...'
-                bat "docker build -t ${IMAGE_NAME}:${DOCKER_TAG} -f Dockerfile ."
+                bat '''docker build -t %IMAGE_NAME%:%DOCKER_TAG% -f Dockerfile .'''
+
             }
         }
 
