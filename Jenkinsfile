@@ -1,21 +1,12 @@
 pipeline {
-    agent {
-        docker {
-            image 'vacaerror/api-monedastt'
-            
-        }
-    }
-    
+    agent any
+
     environment {
-        // Variables de entorno para Docker y Maven
-        DOCKER__NAME     = 'api-monedastt'
-        DOCKER__IMAGE    = 'api-monedastt'
-        DOCKER_NETWORK   = 'apimonedas-network'
-        DOCKER__VERSION  = 'latest'
-        CONTAINER_NAME   = 'api-monedastt'
-        DOCKER__REGISTRY = 'docker.io'
-        HOST_PORT        = '8081'
-        CONTAINER_PORT   = '8080'
+        DOCKER_IMAGE = 'vacaerror/api-monedastt'
+        CONTAINER_NAME = 'api-monedastt'
+        DOCKER_NETWORK = 'apimonedas_red'
+        HOST_PORT = '9090'
+        CONTAINER_PORT = '8080'
     }
 
     stages {
