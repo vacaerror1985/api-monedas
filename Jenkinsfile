@@ -10,11 +10,10 @@ pipeline {
     }
 
     stages {
-               stage('Construir imagen Docker') {
+     stage('Construir imagen Docker') {
             steps {
-               
-                    bat "docker build . -t ${DOCKER_IMAGE}"
-                
+                echo '🐳 Construyendo imagen Docker en raíz del proyecto...'
+                bat "docker build -t ${IMAGE_NAME}:${DOCKER_TAG} -f Dockerfile ."
             }
         }
 
